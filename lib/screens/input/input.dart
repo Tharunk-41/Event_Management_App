@@ -4,6 +4,7 @@ import '../../models/student.dart';
 import '../../redux/actions.dart';
 import '../../redux/store.dart';
 import '../landing/landing.dart';
+import 'package:intl/intl.dart';
 
 class Input extends StatefulWidget {
   static const routeName = '/input';
@@ -15,8 +16,15 @@ class Input extends StatefulWidget {
 
 class _InputState extends State<Input> {
   String name = '';
-  String srn = '';
-  String phoneNo = '';
+  int y=0,m=0,h=0,n=0,d=0,i=0;
+  TextEditingController srn = TextEditingController();
+  TextEditingController phoneNo = TextEditingController();
+
+  void initState() {
+    srn.text = "";
+    phoneNo.text = '';
+    super.initState();
+  }
 
   late BuildContext appStateContext;
 
@@ -29,7 +37,7 @@ class _InputState extends State<Input> {
         return Scaffold(
           appBar: AppBar(
             backgroundColor: Colors.orangeAccent,
-            title: Text('Profile'),
+            title: Text('Add Event'),
           ),
           resizeToAvoidBottomInset: false,
           body: SingleChildScrollView(
@@ -64,7 +72,7 @@ class _InputState extends State<Input> {
                       },
                       keyboardType: TextInputType.text,
                       decoration: const InputDecoration(
-                          hintText: 'Please enter name',
+                          hintText: 'EVENT DETAILS',
                           focusedBorder: OutlineInputBorder(
                               borderSide: BorderSide(
                             color: Colors.blueAccent,
@@ -76,57 +84,77 @@ class _InputState extends State<Input> {
                     height: MediaQuery.of(context).size.height * 0.05,
                   ),
                   Container(
-                    margin: EdgeInsets.symmetric(
-                        horizontal: MediaQuery.of(context).size.width * 0.05,
-                        vertical: 0.0),
-                    child: TextField(
-                      onChanged: (val) {
-                        setState(() {
-                          srn = val;
-                        });
-                      },
-                      keyboardType: TextInputType.text,
-                      decoration: InputDecoration(
-                          hintText: 'Please enter srn',
-                          focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                            color: Colors.blueAccent,
-                            width: 3.0,
-                          ))),
-                    ),
-                  ),
+                      margin: EdgeInsets.symmetric(
+                          horizontal: MediaQuery.of(context).size.width * 0.05,
+                          vertical: 0.0),
+                      child: Center(
+                          child: TextField(
+                        controller: srn, //editing controller of this TextField
+                        decoration: InputDecoration(
+                            icon:
+                                Icon(Icons.calendar_today), //icon of text field
+                            labelText: "Enter Date" //label text of field
+                            ),
+                        readOnly: true,
+                        onTap: () async {
+                          DateTime? pickedDate = await showDatePicker(
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime.now(),
+                              lastDate: DateTime(2101));
+                          if (pickedDate != null) {
+                            String formattedDate =
+                                DateFormat('dd-mm-yyyy').format(pickedDate);
+                            setState(() {
+                              y=pickedDate.year;m=pickedDate.month;d=pickedDate.day;
+                              srn.text =
+                                  formattedDate; //set output date to TextField value.
+                            });
+                          }
+                        },
+                      ))),
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.05,
                   ),
                   Container(
-                    margin: EdgeInsets.symmetric(
-                        horizontal: MediaQuery.of(context).size.width * 0.05,
-                        vertical: 0.0),
-                    child: TextField(
-                      onChanged: (val) {
-                        setState(() {
-                          phoneNo = val;
-                        });
-                      },
-                      keyboardType: TextInputType.phone,
-                      decoration: InputDecoration(
-                          hintText: 'Please enter phone number',
-                          focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                            color: Colors.blueAccent,
-                            width: 3.0,
-                          ))),
-                    ),
-                  ),
+                      margin: EdgeInsets.symmetric(
+                          horizontal: MediaQuery.of(context).size.width * 0.05,
+                          vertical: 0.0),
+                      child: TextField(
+                        controller: phoneNo,
+                        decoration: InputDecoration(
+                            icon: Icon(Icons.timer), labelText: "Enter Time"),
+                        readOnly:
+                            true, //set it true, so that user will not able to edit text
+                        onTap: () async {
+                          TimeOfDay? pickedTime = await showTimePicker(
+                            initialTime: TimeOfDay.now(),
+                            context: context,
+                          );
+                          if (pickedTime != null) {
+                            DateTime parsedTime = DateFormat.jm()
+                                .parse(pickedTime.format(context).toString());
+                            String formattedTime =
+                                DateFormat('hh:mm:ss').format(parsedTime);
+                            setState(() {
+                              h=pickedTime.hour;n=pickedTime.minute;
+                              phoneNo.text =
+                                  formattedTime; //set the value of text field.
+                            }
+                            );
+                          }
+                        },
+                      )),
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.075,
                   ),
                   ElevatedButton(
                     onPressed: () {
                       Student newStudent = Student(
+                        y:y,m:m,d:d,h:h,n:n,i:i,
                         name: name,
-                        srn: srn,
-                        phoneNo: phoneNo,
+                        srn: srn.text,
+                        phoneNo: phoneNo.text,
                       );
                       StoreProvider.of<AppState>(context).dispatch(
                         AddStudent(
@@ -143,7 +171,7 @@ class _InputState extends State<Input> {
                     ),
                     child: const Padding(
                       padding: EdgeInsets.all(20.0),
-                      child: Text('Add Student'),
+                      child: Text('Add Event'),
                     ),
                   ),
                 ],

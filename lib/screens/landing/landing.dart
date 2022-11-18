@@ -23,22 +23,27 @@ class _LandingState extends State<Landing> {
       builder: (context, state) {
         appStateContext = context;
         return Scaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.orangeAccent,
+            title: Text('To Do App'),
+          ),
           backgroundColor: Color(0xFFA0D6FF),
           body: SafeArea(
             child: Container(
-              margin: EdgeInsets.symmetric(
-                vertical: MediaQuery.of(context).size.height * 0.05,
-                horizontal: MediaQuery.of(context).size.width * 0.1,
-              ),
               width: MediaQuery.of(context).size.width,
               child: ListView(
                 children: [
-                  CircleAvatar(
-                    radius: 100.0,
-                    backgroundImage:
-                        AssetImage('assets/images/apple-intro.jpg'),
-                  ),
                   SizedBox(
+                    child: Text(
+                      'Upcoming Events',
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                        fontSize: 36.0,
+                        color: Colors.brown,
+                        fontFamily: 'Lato',
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                     height: MediaQuery.of(context).size.height * 0.1,
                   ),
                   ...state.students!
@@ -50,6 +55,12 @@ class _LandingState extends State<Landing> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => Profile(
+                                  y: e.y,
+                                  m: e.m,
+                                  h: e.h,
+                                  n: e.n,
+                                  d: e.d,
+                                  i: e.i,
                                   name: e.name,
                                   srn: e.srn,
                                   phoneNo: e.phoneNo,
@@ -58,10 +69,13 @@ class _LandingState extends State<Landing> {
                             );
                           },
                           child: ListTile(
+                            trailing: FaIcon(
+                              FontAwesomeIcons.circleArrowRight,
+                            ),
                             title: Text(e.name),
                             subtitle: Text(e.srn),
-                            trailing: FaIcon(
-                              FontAwesomeIcons.user,
+                            leading: FaIcon(
+                              FontAwesomeIcons.calendarCheck,
                             ),
                           ),
                         ),
@@ -82,9 +96,17 @@ class _LandingState extends State<Landing> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.orangeAccent,
                 ),
-                child: const Padding(
+                child: Padding(
                   padding: EdgeInsets.all(20.0),
-                  child: Text('Add Student'),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      FaIcon(
+                        FontAwesomeIcons.squarePlus,
+                      ),
+                      Text('Add Event'),
+                    ],
+                  ),
                 ),
               ),
               ElevatedButton(
@@ -94,9 +116,17 @@ class _LandingState extends State<Landing> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.orangeAccent,
                 ),
-                child: const Padding(
+                child: Padding(
                   padding: EdgeInsets.all(20.0),
-                  child: Text('Remove Student'),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      FaIcon(
+                        FontAwesomeIcons.trash,
+                      ),
+                      Text('Remove Event'),
+                    ],
+                  ),
                 ),
               ),
             ],

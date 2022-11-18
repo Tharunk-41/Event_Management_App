@@ -26,7 +26,7 @@ class _RemoveState extends State<Remove> {
         return Scaffold(
           appBar: AppBar(
             backgroundColor: Colors.orangeAccent,
-            title: Text('Remove Profile'),
+            title: Text('Remove Event'),
           ),
           resizeToAvoidBottomInset: false,
           body: SingleChildScrollView(
@@ -61,7 +61,7 @@ class _RemoveState extends State<Remove> {
                       },
                       keyboardType: TextInputType.text,
                       decoration: const InputDecoration(
-                          hintText: 'Please enter name',
+                          hintText: 'Please enter Event name',
                           focusedBorder: OutlineInputBorder(
                               borderSide: BorderSide(
                                 color: Colors.blueAccent,
@@ -89,7 +89,7 @@ class _RemoveState extends State<Remove> {
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(20.0),
-                      child: Text('Remove Student'),
+                      child: Text('Remove Event'),
                     ),
                   ),
                 ],
